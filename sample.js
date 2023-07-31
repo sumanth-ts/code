@@ -1,10 +1,14 @@
-// pages/index.js
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
 
 const socket = io('http://localhost:4000'); // Replace with your Socket.IO backend URL
 
-export default function Home() {
+export default function Chat() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
@@ -38,65 +42,39 @@ export default function Home() {
   };
 
   return (
-    <div>
+    <Box sx={{ position: 'fixed', bottom: 20, right: 20, width: 300 }}>
       {isOpen ? (
-        <div className="chat-window">
-          <div className="chat-messages">
+        <Paper elevation={3}>
+          <Stack spacing={1} p={2} sx={{ height: 300, overflowY: 'auto' }}>
             {messages.map((message, index) => (
-              <div key={index} className={`message ${message.sender}`}>
+              <Box key={index} textAlign={message.sender === 'user' ? 'right' : 'left'}>
                 {message.text}
-              </div>
+              </Box>
             ))}
-          </div>
-          <div className="chat-input">
-            <input
-              type="text"
+          </Stack>
+          <Box p={2} display="flex">
+            <TextField
+              fullWidth
               value={input}
               onChange={(e) => setInput(e.target.value)}
+              variant="outlined"
               placeholder="Type your message..."
             />
-            <button onClick={handleSendMessage}>Send</button>
-          </div>
-        </div>
+            <Button onClick={handleSendMessage} variant="contained" color="primary">
+              Send
+            </Button>
+          </Box>
+        </Paper>
       ) : (
-        <button className="open-chat" onClick={handleOpenChat}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleOpenChat}
+          sx={{ position: 'fixed', bottom: 20, right: 20 }}
+        >
           Open Chat
-        </button>
+        </Button>
       )}
-
-      <style jsx>{`
-        .chat-window {
-          position: fixed;
-          bottom: 20px;
-          right: 20px;
-          width: 300px;
-          border: 1px solid #ccc;
-          border-radius: 8px;
-          background-color: #fff;
-          display: flex;
-          flex-direction: column;
-        }
-        .chat-messages {
-          flex: 1;
-          padding: 10px;
-          overflow-y: auto;
-        }
-        .message {
-          margin-bottom: 10px;
-        }
-        .user {
-          text-align: right;
-        }
-        .chat-input {
-          display: flex;
-          padding: 10px;
-        }
-        .chat-input input {
-          flex: 1;
-          margin-right: 10px;
-          padding: 5px;
-        }
-      `}</style>
-    </div>
+    </Box>
   );
 }
