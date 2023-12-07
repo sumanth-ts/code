@@ -1,86 +1,61 @@
-// components/ChatWithHOC.js
-import React, { useEffect, useState } from 'react';
-import io from 'socket.io-client';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import Paper from '@mui/material/Paper';
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
+// Import necessary libraries
+import React, { useState } from 'react';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Input, Paper } from '@mui/material';
+import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 
-const socket = io('http://localhost:4000'); // Replace with your Socket.IO backend URL
+// Your visual search component
+const VisualSearch = () => {
+  // State to manage dialog open/close
+  const [open, setOpen] = useState(false);
 
-const ChatWithHOC = (WrappedComponent) => {
-  return function WithChat(props) {
-    const [isOpen, setIsOpen] = useState(false);
-    const [messages, setMessages] = useState([]);
-    const [input, setInput] = useState('');
-
-    useEffect(() => {
-      socket.on('connect', () => {
-        console.log('Connected to Socket.IO server');
-      });
-
-      socket.on('message', (message) => {
-        setMessages((prevMessages) => [...prevMessages, message]);
-      });
-
-      socket.on('disconnect', () => {
-        console.log('Disconnected from Socket.IO server');
-      });
-    }, []);
-
-    const handleOpenChat = () => {
-      setIsOpen(true);
-      // Send a greeting message to the server
-      socket.emit('message', 'Hello, I am your chatbot! How can I assist you?');
-    };
-
-    const handleSendMessage = () => {
-      if (input.trim() !== '') {
-        setMessages((prevMessages) => [...prevMessages, { text: input, sender: 'user' }]);
-        socket.emit('message', input);
-        setInput('');
-      }
-    };
-
-    return (
-      <Box sx={{ position: 'fixed', bottom: 20, right: 20, width: 300 }}>
-        {isOpen ? (
-          <Paper elevation={3}>
-            <Stack spacing={1} p={2} sx={{ height: 300, overflowY: 'auto' }}>
-              {messages.map((message, index) => (
-                <Box key={index} textAlign={message.sender === 'user' ? 'right' : 'left'}>
-                  {message.text}
-                </Box>
-              ))}
-            </Stack>
-            <Box p={2} display="flex">
-              <TextField
-                fullWidth
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                variant="outlined"
-                placeholder="Type your message..."
-              />
-              <Button onClick={handleSendMessage} variant="contained" color="primary">
-                Send
-              </Button>
-            </Box>
-          </Paper>
-        ) : (
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleOpenChat}
-            sx={{ position: 'fixed', bottom: 20, right: 20 }}
-          >
-            Open Chat
-          </Button>
-        )}
-        <WrappedComponent {...props} />
-      </Box>
-    );
+  // Function to handle opening the dialog
+  const handleOpen = () => {
+    setOpen(true);
   };
+
+  // Function to handle closing the dialog
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  // Function to handle image upload and API call
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    // Perform API call with the image file
+    // You can replace the console.log with your API call logic
+    console.log('API call with image:', file);
+    // Close the dialog after handling the image
+    handleClose();
+  };
+
+  return (
+    <div>
+      {/* Button to trigger visual search */}
+      <IconButton onClick={handleOpen} color="primary" component="span">
+        <PhotoCameraIcon />
+      </IconButton>
+
+      {/* Dialog for image upload */}
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Visual Search</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Please upload an image for visual search.
+          </DialogContentText>
+          <Paper elevation={3} style={{ padding: '10px' }}>
+            {/* Input for image upload */}
+            <Input type="file" onChange={handleImageUpload} />
+          </Paper>
+        </DialogContent>
+        <DialogActions>
+          {/* Button to close the dialog */}
+          <Button onClick={handleClose} color="primary">
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
 };
 
-export default ChatWithHOC;
+export default VisualSearch;
