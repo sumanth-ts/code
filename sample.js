@@ -1,61 +1,54 @@
-// Import necessary libraries
-import React, { useState } from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Input, Paper } from '@mui/material';
-import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
+import React from 'react';
+import { AppBar, Toolbar, IconButton, Typography, Container, Paper } from '@mui/material';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
-// Your visual search component
-const VisualSearch = () => {
-  // State to manage dialog open/close
-  const [open, setOpen] = useState(false);
+const Header = () => {
+    return (
+        <AppBar position="static">
+            <Toolbar>
+                {/* Left side logo */}
+                <Typography variant="h6" style={{ flexGrow: 1 }}>
+                    Your Logo
+                </Typography>
 
-  // Function to handle opening the dialog
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  // Function to handle closing the dialog
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  // Function to handle image upload and API call
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
-    // Perform API call with the image file
-    // You can replace the console.log with your API call logic
-    console.log('API call with image:', file);
-    // Close the dialog after handling the image
-    handleClose();
-  };
-
-  return (
-    <div>
-      {/* Button to trigger visual search */}
-      <IconButton onClick={handleOpen} color="primary" component="span">
-        <PhotoCameraIcon />
-      </IconButton>
-
-      {/* Dialog for image upload */}
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Visual Search</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Please upload an image for visual search.
-          </DialogContentText>
-          <Paper elevation={3} style={{ padding: '10px' }}>
-            {/* Input for image upload */}
-            <Input type="file" onChange={handleImageUpload} />
-          </Paper>
-        </DialogContent>
-        <DialogActions>
-          {/* Button to close the dialog */}
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
-  );
+                {/* Right side icons */}
+                <IconButton color="inherit">
+                    <FavoriteIcon />
+                </IconButton>
+                <IconButton color="inherit">
+                    <ShoppingCartIcon />
+                </IconButton>
+                <IconButton color="inherit">
+                    <AccountCircleIcon />
+                </IconButton>
+                <IconButton color="inherit">
+                    <ExitToAppIcon />
+                    Logout
+                </IconButton>
+            </Toolbar>
+        </AppBar>
+    );
 };
 
-export default VisualSearch;
+const Footer = () => {
+    return (
+        <Paper elevation={3} style={{ position: 'fixed', bottom: 0, width: '100%', padding: '10px', textAlign: 'center' }}>
+            &copy; {new Date().getFullYear()} Your Company. All rights reserved.
+        </Paper>
+    );
+};
+
+const Layout = ({ children }) => {
+    return (
+        <div>
+            <Header />
+            <Container style={{ marginBottom: '60px' }}>{children}</Container>
+            <Footer />
+        </div>
+    );
+};
+
+export default Layout;
