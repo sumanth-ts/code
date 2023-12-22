@@ -1,54 +1,19 @@
-import React from 'react';
-import { AppBar, Toolbar, IconButton, Typography, Container, Paper } from '@mui/material';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+<StyledDiv>
+            {/* Badge with ToggleButton */}
+            <Badge color="primary" badgeContent={<ToggleButton size="small">Toggle</ToggleButton>}>
+                {/* TextField */}
+                <TextField label="Your Text" variant="outlined" />
+            </Badge>
 
-const Header = () => {
-    return (
-        <AppBar position="static">
-            <Toolbar>
-                {/* Left side logo */}
-                <Typography variant="h6" style={{ flexGrow: 1 }}>
-                    Your Logo
-                </Typography>
+            {/* Some names with background color */}
+            <div style={{ marginTop: '20px' }}>
+                <div style={{ background: 'linear-gradient(to right, #66ff66, #6699ff)', padding: '10px', display: 'inline-block', margin: '5px' }}>Name 1</div>
+                <div style={{ background: 'linear-gradient(to right, #ff99cc, #cc99ff)', padding: '10px', display: 'inline-block', margin: '5px' }}>Name 2</div>
+                <div style={{ background: 'linear-gradient(to right, #99ffcc, #ffcc99)', padding: '10px', display: 'inline-block', margin: '5px' }}>Name 3</div>
+            </div>
 
-                {/* Right side icons */}
-                <IconButton color="inherit">
-                    <FavoriteIcon />
-                </IconButton>
-                <IconButton color="inherit">
-                    <ShoppingCartIcon />
-                </IconButton>
-                <IconButton color="inherit">
-                    <AccountCircleIcon />
-                </IconButton>
-                <IconButton color="inherit">
-                    <ExitToAppIcon />
-                    Logout
-                </IconButton>
-            </Toolbar>
-        </AppBar>
-    );
-};
-
-const Footer = () => {
-    return (
-        <Paper elevation={3} style={{ position: 'fixed', bottom: 0, width: '100%', padding: '10px', textAlign: 'center' }}>
-            &copy; {new Date().getFullYear()} Your Company. All rights reserved.
-        </Paper>
-    );
-};
-
-const Layout = ({ children }) => {
-    return (
-        <div>
-            <Header />
-            <Container style={{ marginBottom: '60px' }}>{children}</Container>
-            <Footer />
-        </div>
-    );
-};
-
-export default Layout;
+            {/* Search button with linear gradient background */}
+            <Button variant="contained" style={{ background: 'linear-gradient(to right, #ff6666, #ffcc00)', marginTop: '20px' }}>
+                Search
+            </Button>
+        </StyledDiv>
